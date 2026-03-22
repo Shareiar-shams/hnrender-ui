@@ -11,8 +11,9 @@ function timeAgo(unix: number): string {
   return `${Math.floor(diff / 86400)}d ago`;
 }
 
-export default async function StoryPage({ params }: { params: { id: string } }) {
-  const story = await getStory(parseInt(params.id));
+export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const story = await getStory(parseInt(id))
 
   return (
     <div>
