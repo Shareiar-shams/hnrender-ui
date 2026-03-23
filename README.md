@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HN Reader Frontend
+
+A Next.js app for browsing Hacker News stories with bookmarks and AI-powered discussion summaries.
+
+## Highlights
+
+- Top, New, and Best feeds with pagination
+- Story detail view with threaded comments
+- AI discussion summaries with sentiment tags
+- Bookmarks with search and one-click remove
+- Clean, responsive UI built with Tailwind CSS
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Axios
+
+## Requirements
+
+- Node.js 20+
+- PNPM (recommended, matches the lockfile)
+- The backend API running (see `D:\hn-reader\backend\README.md`)
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Configure environment variables
+```bash
+echo NEXT_PUBLIC_API_URL=http://localhost:4000 > .env
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the dev server
+```bash
+pnpm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app runs at `http://localhost:3000` by default.
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Description | Default |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Base URL for the backend API | `http://localhost:4000` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## App Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Route | Description |
+|---|---|
+| `/` | Feed view (Top/New/Best) |
+| `/story/[id]` | Story details, comments, and AI summary |
+| `/bookmarks` | Bookmarked stories and search |
 
-## Deploy on Vercel
+## Backend API Expectations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The frontend calls these backend endpoints:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `GET /api/hn/stories?type=top|new|best&page=1&limit=30`
+- `GET /api/hn/story/:id`
+- `GET /api/bookmarks?search=...`
+- `POST /api/bookmarks`
+- `DELETE /api/bookmarks/:storyId`
+- `GET /api/bookmarks/check/:storyId`
+- `GET /api/summary/:storyId`
+- `POST /api/summary/:storyId`
+
+See `D:\hn-reader\backend\README.md` for full API details.
+
+## Scripts
+
+| Script | Description |
+|---|---|
+| `pnpm run dev` | Start the dev server |
+| `pnpm run build` | Build for production |
+| `pnpm run start` | Start the production server |
+| `pnpm run lint` | Run ESLint |
+
+## Docker
+
+Build and run the frontend image:
+
+```bash
+docker build -t hn-reader-frontend .
+docker run -p 3000:3000 --env NEXT_PUBLIC_API_URL=http://localhost:4000 hn-reader-frontend
+```
+
+## Project Structure
+
+| Path | Purpose |
+|---|---|
+| `src/app` | App Router pages and layout |
+| `src/components` | UI components |
+| `src/lib/api.ts` | API client wrapper |
+| `src/types` | Shared TypeScript types |
