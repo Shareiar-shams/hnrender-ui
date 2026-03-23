@@ -19,10 +19,9 @@ export default function SummaryPanel({ storyId }: { storyId: number }) {
   // Check if cached summary exists on load
   useEffect(() => {
     getSummary(storyId)
-      .then(setSummary)
-      .catch(() => {})
-      .finally(() => setChecked(true));
-  }, [storyId]);
+      .then(data => setSummary(data))
+      .finally(() => setChecked(true))
+  }, [storyId])
 
   const handleSummarize = async () => {
     setLoading(true);
