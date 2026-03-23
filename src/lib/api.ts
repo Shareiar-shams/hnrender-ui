@@ -33,8 +33,14 @@ export const checkBookmark = (storyId: number): Promise<{ bookmarked: boolean }>
   api.get(`/api/bookmarks/check/${storyId}`).then(r => r.data);
 
 // AI Summary
-export const getSummary = (storyId: number): Promise<Summary> =>
-  api.get(`/api/summary/${storyId}`).then(r => r.data);
+// export const getSummary = (storyId: number): Promise<Summary> =>
+//   api.get(`/api/summary/${storyId}`).then(r => r.data);
+
+export const getSummary = (storyId: number): Promise<Summary | null> =>
+  api.get(`/api/summary/${storyId}`).then(r => {
+    if (r.data.exists === false) return null
+    return r.data as Summary
+  })
 
 export const generateSummary = (storyId: number): Promise<Summary> =>
   api.post(`/api/summary/${storyId}`).then(r => r.data);
